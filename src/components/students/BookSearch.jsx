@@ -18,7 +18,7 @@ export default function BookSearchPage() {
       setLoading(true);
       setError(""); // clear previous error
       const response = await getAllBooks();
-      setBooks(response.data);
+setBooks(response.data.data);
     } catch (err) {
       setError("Failed to load books");
     } finally {
@@ -44,7 +44,8 @@ export default function BookSearchPage() {
       setError("");
       setLoading(true);
       const response = await searchBooks(value);
-      setBooks(response.data);
+setBooks(response.data.data);
+
     } catch (err) {
       setError("Search failed");
     } finally {
@@ -53,6 +54,7 @@ export default function BookSearchPage() {
   };
   
   const groupedBooks = useMemo(() => {
+    if (!Array.isArray(books)) return {};
     const groups = {};
     books.forEach((book) => {
       const firstChar = book.title?.charAt(0)?.toUpperCase() || "#";
@@ -62,6 +64,7 @@ export default function BookSearchPage() {
     });
     return groups;
   }, [books]);
+  
   
 
   return (
