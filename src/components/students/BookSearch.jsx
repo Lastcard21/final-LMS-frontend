@@ -16,25 +16,21 @@ export default function BookSearchPage() {
   const fetchAllBooks = async () => {
     try {
       setLoading(true);
-      setError(""); // clear previous error
+      setError(""); 
       const response = await getAllBooks();
-setBooks(response.data.data);
+      // Wrap single object in array if needed
+      setBooks(Array.isArray(response.data) ? response.data : [response.data]);
     } catch (err) {
       setError("Failed to load books");
     } finally {
       setLoading(false);
     }
   };
-  
-  useEffect(() => {
-    fetchAllBooks();
-  }, []);
-  
-  
 
+  
   const handleSearch = async (value) => {
     setQuery(value);
-  
+
     if (value.trim() === "") {
       fetchAllBooks();
       return;
@@ -44,14 +40,14 @@ setBooks(response.data.data);
       setError("");
       setLoading(true);
       const response = await searchBooks(value);
-      setBooks(response.data?.data || []);
-
+      setBooks(Array.isArray(response.data) ? response.data : [response.data]);
     } catch (err) {
       setError("Search failed");
     } finally {
       setLoading(false);
     }
   };
+  
   
   const groupedBooks = useMemo(() => {
     const groups = {};
